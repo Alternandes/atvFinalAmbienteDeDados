@@ -1,0 +1,41 @@
+INSERT INTO CLIENTE (nome, telefone, email, endereco_completo, cep) VALUES
+('João Silva', '85998765432', 'joao.silva@exemplo.com', 'Rua A, 123 - Centro', '60000-001'),
+('Maria Santos', '85991234567', 'maria.santos@exemplo.com', 'Av. B, 456 - Aldeota', '60100-002');
+
+INSERT INTO FUNCIONARIO (id_funcionario, nome, telefone, email, data_nascimento, endereco_completo, cep, cargo) VALUES
+(1, 'Pedro Souza', '85993456789', 'pedro.souza@logis.com', '1985-05-10', 'Rua C, 789', '60200-003', 'Motorista'),
+(2, 'Ana Costa', '85997654321', 'ana.costa@logis.com', '1995-12-25', 'Av. D, 101', '60300-004', 'Motorista'),
+(3, 'Carlos Lima', '85991112222', 'carlos.lima@logis.com', '1990-01-01', 'Rua E, 202', '60400-005', 'Administrativo');
+
+INSERT INTO MOTORISTA (id_motorista, cnh_numero, cnh_categoria, cnh_validade) VALUES
+(1, '12345678900', 'D', '2028-05-10'),
+(2, '00987654321', 'A', '2034-12-25');
+
+INSERT INTO VEICULO (id_veiculo, placa, tipo, qtd_eixos, capacidade_carga_kg, peso_veiculo_kg, dimensoes, autonomia_km_l, km_abastecimento) VALUES
+(1, 'XYZ-1A23', 'Caminhão', 3, 15000.00, 8000.00, '9x2.5x3', 2.50, 95000.00),
+(2, 'ABC-4B56', 'Moto', 2, 5.00, 150.00, '1x0.5x0.8', 35.00, 1500.00),
+(3, 'DEF-7C89', 'Van', 2, 800.00, 2500.00, '4x1.8x2', 10.00, 50000.00);
+
+INSERT INTO ROTA (id_rota, id_veiculo, ponto_partida, ponto_destino, duracao_prevista_min, distancia_total_km) VALUES
+(1, 1, 'Depósito Fortaleza', 'Cliente João Silva - Centro', 120, 150.50),
+(2, 2, 'Depósito Fortaleza', 'Cliente Maria Santos - Aldeota', 45, 12.80);
+
+INSERT INTO TRECHO_ROTA (id_rota, ordem_trecho, ponto_intermediario, distancia_km) VALUES
+(1, 1, 'Ponto de Apoio 1', 100.00),
+(1, 2, 'Cliente João Silva - Centro', 50.50),
+(2, 1, 'Cliente Maria Santos - Aldeota', 12.80);
+
+INSERT INTO MANUTENCAO (id_manutencao, id_veiculo, tipo_manutencao, data_realizacao, km_manutencao, custo, data_prox_manutencao) VALUES
+(1, 1, 'Revisão 100K', '2025-10-01', 90000.00, 2500.00, '2026-04-01');
+
+INSERT INTO ENTREGA (id_entrega, id_cliente, id_motorista, id_veiculo, id_rota, status, valor_frete, data_pagamento) VALUES
+(1, 1, 1, 1, 1, 'ENTREGUE', 350.00, '2025-11-20 10:00:00'),
+(2, 2, 2, 2, 2, 'EM_TRANSITO', 25.00, '2025-11-27 15:00:00'),
+(3, 1, NULL, NULL, NULL, 'PENDENTE', 150.00, NULL);
+
+INSERT INTO DETALHE_CARGA (id_entrega, descricao_carga, tipo_carga, peso_kg, altura_cm, largura_cm, profundidade_cm, cep_coleta, cep_entrega, data_prevista_entrega) VALUES
+(1, '10 caixas de eletrônicos', 'Carga Seca', 500.00, 100.00, 100.00, 100.00, '60500-001', '60000-001', '2025-11-22'),
+(2, 'Documentos Urgentes', 'Carga Seca', 1.00, 20.00, 30.00, 1.00, '60150-000', '60100-002', '2025-11-27');
+
+INSERT INTO INFO_ENTREGA_FINAL (id_entrega, data_hora_entrega, nome_recebedor) VALUES
+(1, '2025-11-20 12:30:00', 'Fernando Pires');

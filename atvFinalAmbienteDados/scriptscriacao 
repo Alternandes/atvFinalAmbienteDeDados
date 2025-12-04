@@ -1,0 +1,98 @@
+CREATE TABLE CLIENTE (
+    id_cliente SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    telefone VARCHAR(20),
+    email VARCHAR(100) UNIQUE,
+    endereco_completo VARCHAR(255),
+    cep VARCHAR(10)
+);
+
+CREATE TABLE FUNCIONARIO (
+    id_funcionario SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    telefone VARCHAR(20),
+    email VARCHAR(100) UNIQUE,
+    data_nascimento DATE NOT NULL,
+    endereco_completo VARCHAR(255),
+    cep VARCHAR(10),
+    cargo VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE MOTORISTA (
+    id_motorista INTEGER PRIMARY KEY,
+    cnh_numero VARCHAR(20) UNIQUE NOT NULL,
+    cnh_categoria VARCHAR(5) NOT NULL,
+    cnh_validade DATE NOT NULL,
+    CHECK (cnh_categoria IN ('A', 'B', 'C', 'D', 'E', 'AB', 'AC', 'AD', 'AE'))
+);
+
+CREATE TABLE VEICULO (
+    id_veiculo SERIAL PRIMARY KEY,
+    placa VARCHAR(10) UNIQUE NOT NULL,
+    tipo VARCHAR(50) NOT NULL,
+    qtd_eixos INTEGER,
+    capacidade_carga_kg NUMERIC(10, 2) NOT NULL,
+    peso_veiculo_kg NUMERIC(10, 2) NOT NULL,
+    dimensoes VARCHAR(50),
+    autonomia_km_l NUMERIC(5, 2),
+    km_abastecimento NUMERIC(10, 2)
+);
+
+CREATE TABLE ROTA (
+    id_rota SERIAL PRIMARY KEY,
+    id_veiculo INTEGER,
+    ponto_partida VARCHAR(255) NOT NULL,
+    ponto_destino VARCHAR(255) NOT NULL,
+    duracao_prevista_min INTEGER,
+    distancia_total_km NUMERIC(8, 2) NOT NULL
+);
+
+CREATE TABLE TRECHO_ROTA (
+    id_trecho SERIAL,
+    id_rota INTEGER NOT NULL,
+    ordem_trecho INTEGER NOT NULL,
+    ponto_intermediario VARCHAR(255) NOT NULL,
+    distancia_km NUMERIC(8, 2) NOT NULL,
+    PRIMARY KEY (id_trecho, id_rota)
+);
+
+CREATE TABLE MANUTENCAO (
+    id_manutencao SERIAL PRIMARY KEY,
+    id_veiculo INTEGER NOT NULL,
+    tipo_manutencao VARCHAR(50) NOT NULL,
+    data_realizacao DATE NOT NULL,
+    km_manutencao NUMERIC(10, 2) NOT NULL,
+    custo NUMERIC(10, 2),
+    data_prox_manutencao DATE
+);
+
+CREATE TABLE ENTREGA (
+    id_entrega SERIAL PRIMARY KEY,
+    id_cliente INTEGER NOT NULL,
+    id_motorista INTEGER,
+    id_veiculo INTEGER,
+    id_rota INTEGER,
+    status VARCHAR(50) NOT NULL,
+    valor_frete NUMERIC(10, 2),
+    data_pagamento TIMESTAMP,
+    CHECK (status IN ('PENDENTE', 'EM_TRANSITO', 'ENTREGUE', 'CANCELADA', 'ATRASADA', 'DEVOLVIDA'))
+);
+
+CREATE TABLE DETALHE_CARGA (
+    id_entrega INTEGER PRIMARY KEY,
+    descricao_carga VARCHAR(255) NOT NULL,
+    tipo_carga VARCHAR(50) NOT NULL,
+    peso_kg NUMERIC(8, 2) NOT NULL,
+    altura_cm NUMERIC(6, 2),
+    largura_cm NUMERIC(6, 2),
+    profundidade_cm NUMERIC(6, 2),
+    cep_coleta VARCHAR(10) NOT NULL,
+    cep_entrega VARCHAR(10) NOT NULL,
+    data_prevista_entrega DATE NOT NULL
+);
+
+CREATE TABLE INFO_ENTREGA_FINAL (
+    id_entrega INTEGER PRIMARY KEY,
+    data_hora_entrega TIMESTAMP NOT NULL,
+    nome_recebedor VARCHAR(100) NOT NULL
+);

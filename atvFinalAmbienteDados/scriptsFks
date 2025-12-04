@@ -1,0 +1,42 @@
+ALTER TABLE MOTORISTA
+ADD CONSTRAINT fk_motorista_funcionario
+FOREIGN KEY (id_motorista) REFERENCES FUNCIONARIO (id_funcionario)
+ON DELETE CASCADE;
+
+ALTER TABLE ROTA
+ADD CONSTRAINT fk_rota_veiculo
+FOREIGN KEY (id_veiculo) REFERENCES VEICULO (id_veiculo);
+
+ALTER TABLE TRECHO_ROTA
+ADD CONSTRAINT fk_trecho_rota_rota
+FOREIGN KEY (id_rota) REFERENCES ROTA (id_rota);
+
+ALTER TABLE MANUTENCAO
+ADD CONSTRAINT fk_manutencao_veiculo
+FOREIGN KEY (id_veiculo) REFERENCES VEICULO (id_veiculo);
+
+ALTER TABLE ENTREGA
+ADD CONSTRAINT fk_entrega_cliente
+FOREIGN KEY (id_cliente) REFERENCES CLIENTE (id_cliente);
+
+ALTER TABLE ENTREGA
+ADD CONSTRAINT fk_entrega_motorista
+FOREIGN KEY (id_motorista) REFERENCES MOTORISTA (id_motorista);
+
+ALTER TABLE ENTREGA
+ADD CONSTRAINT fk_entrega_veiculo
+FOREIGN KEY (id_veiculo) REFERENCES VEICULO (id_veiculo);
+
+ALTER TABLE ENTREGA
+ADD CONSTRAINT fk_entrega_rota
+FOREIGN KEY (id_rota) REFERENCES ROTA (id_rota);
+
+ALTER TABLE DETALHE_CARGA
+ADD CONSTRAINT fk_detalhe_carga_entrega
+FOREIGN KEY (id_entrega) REFERENCES ENTREGA (id_entrega)
+ON DELETE CASCADE;
+
+ALTER TABLE INFO_ENTREGA_FINAL
+ADD CONSTRAINT fk_info_entrega_final_entrega
+FOREIGN KEY (id_entrega) REFERENCES ENTREGA (id_entrega)
+ON DELETE CASCADE;
