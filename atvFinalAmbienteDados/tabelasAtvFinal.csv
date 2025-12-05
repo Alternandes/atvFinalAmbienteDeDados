@@ -1,0 +1,4 @@
+id_veiculo,placa,tipo,total_entregas,status_veiculo
+1,XYZ-1A23,Caminhão,1,MANUTENÇÃO
+2,ABC-4B56,Moto,1,"EM USO"
+3,DEF-7C89,Van,0,DISPONÍVEL
