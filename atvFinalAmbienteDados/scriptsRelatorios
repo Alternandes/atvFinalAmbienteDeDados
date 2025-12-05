@@ -1,4 +1,8 @@
---Relatório de Entregas por Cliente
+-- =============================
+-- CONSULTAS
+-- =============================
+
+-- Relatório de Entregas por Cliente
 SELECT 
     c.id_cliente,
     c.nome AS nome_cliente,
@@ -10,64 +14,49 @@ LEFT JOIN ENTREGA e ON e.id_cliente = c.id_cliente
 LEFT JOIN DETALHE_CARGA dc ON dc.id_entrega = e.id_entrega
 ORDER BY c.id_cliente, e.id_entrega;
 
---Relatório de Utilização de Veículos
+-- Relatório de Utilização de Veículos
 SELECT 
     v.id_veiculo,
     v.placa,
     v.tipo,
-    
-    -- Quantidade de entregas registradas para o veículo
     COUNT(e.id_entrega) AS total_entregas,
-
-    -- Status do veículo
     CASE 
         WHEN EXISTS (
             SELECT 1 FROM MANUTENCAO m 
             WHERE m.id_veiculo = v.id_veiculo
               AND m.data_prox_manutencao > CURRENT_DATE
         ) THEN 'MANUTENÇÃO'
-        
         WHEN EXISTS (
             SELECT 1 FROM ENTREGA e2
             WHERE e2.id_veiculo = v.id_veiculo
               AND e2.status = 'EM_TRANSITO'
         ) THEN 'EM USO'
-
         ELSE 'DISPONÍVEL'
     END AS status_veiculo
-
 FROM VEICULO v
 LEFT JOIN ENTREGA e ON e.id_veiculo = v.id_veiculo
 GROUP BY v.id_veiculo, v.placa, v.tipo
 ORDER BY v.id_veiculo;
 
---Relatório de Status de Entregas por Mês
+-- Relatório de Status de Entregas por Mês
 SELECT 
-    TO_CHAR(e.data_pagamento, 'YYYY-MM') AS ano_mes,
+    DATE_FORMAT(e.data_pagamento, '%Y-%m') AS ano_mes,
     e.status,
     COUNT(*) AS total
 FROM ENTREGA e
 WHERE e.data_pagamento IS NOT NULL
-GROUP BY TO_CHAR(e.data_pagamento, 'YYYY-MM'), e.status
+GROUP BY DATE_FORMAT(e.data_pagamento, '%Y-%m'), e.status
 ORDER BY ano_mes, status;
 
---Relatório de Desempenho dos Motoristas
+-- Relatório de Desempenho dos Motoristas
 SELECT 
     m.id_motorista,
     f.nome AS nome_motorista,
-
-    -- Entregas concluídas
     COUNT(CASE WHEN e.status = 'ENTREGUE' THEN 1 END) AS entregas_concluidas,
-
-    -- Canceladas
     COUNT(CASE WHEN e.status = 'CANCELADA' THEN 1 END) AS entregas_canceladas,
-
-    -- Total geral
     COUNT(e.id_entrega) AS total_entregas
 FROM MOTORISTA m
 JOIN FUNCIONARIO f ON f.id_funcionario = m.id_motorista
 LEFT JOIN ENTREGA e ON e.id_motorista = m.id_motorista
 GROUP BY m.id_motorista, f.nome
 ORDER BY m.id_motorista;
-
-
